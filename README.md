@@ -1,3 +1,5 @@
+<img width="1231" height="392" alt="Ekran Resmi 2026-07-20 21 15 40" src="https://github.com/user-attachments/assets/6841b2cc-ef60-4422-974a-6a251a22ba90" />
+
 # Thru Onboarding Tool
 
 Local and Codespaces-ready web tool for setting up a Thru alphanet account, running basic token/name service actions, and saving proof data.
