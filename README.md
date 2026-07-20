@@ -87,7 +87,7 @@ The Proof section keeps:
 - domain account
 - last signature
 
-Each value can be copied. Explorer links open the matching address or transaction on:
+Public values can be copied. The private key has a separate `Private Key` download button. Explorer links open the matching address or transaction on:
 
 ```text
 https://scan.thru.org/

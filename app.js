@@ -39,6 +39,7 @@ const elements = {
   evidenceGrid: document.querySelector("#evidenceGrid"),
   exportJsonButton: document.querySelector("#exportJsonButton"),
   exportMarkdownButton: document.querySelector("#exportMarkdownButton"),
+  exportPrivateKeyButton: document.querySelector("#exportPrivateKeyButton"),
   faucetAmountInput: document.querySelector("#faucetAmountInput"),
   faucetButton: document.querySelector("#faucetButton"),
   healthButton: document.querySelector("#healthButton"),
@@ -244,10 +245,14 @@ function renderEvidence() {
         <div class="evidence-item ${isPrivate ? "is-private" : ""}">
           <span>${escapeHtml(label)}</span>
           <strong title="${escapeHtml(isPrivate && value ? "Keep this private key safe." : value || "")}">${escapeHtml(shortValue(value))}</strong>
-          <div class="evidence-row-actions">
-            <button class="secondary-button evidence-copy" type="button" data-copy-value="${escapeHtml(value || "")}">Copy</button>
-            ${value && !isPrivate ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
-          </div>
+          ${
+            isPrivate
+              ? ""
+              : `<div class="evidence-row-actions">
+                  <button class="secondary-button evidence-copy" type="button" data-copy-value="${escapeHtml(value || "")}">Copy</button>
+                  ${value ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
+                </div>`
+          }
           ${isPrivate ? `<p class="private-key-warning">Save this private key somewhere safe. Do not share it with anyone.</p>` : ""}
         </div>
       `,
@@ -566,6 +571,23 @@ function exportProofJson() {
 
 function exportProofMarkdown() {
   exportFile("thru-proof.md", proofMarkdown(), "text/markdown");
+}
+
+function exportPrivateKey() {
+  if (!state.privateKey) {
+    appendOutput("Private key not ready.", { error: "Run Prepare My Account first." });
+    return;
+  }
+
+  const content = [
+    "Thru private key",
+    "",
+    state.privateKey,
+    "",
+    "Save this private key somewhere safe. Do not share it with anyone.",
+    "",
+  ].join("\n");
+  exportFile("thru-private-key.txt", content, "text/plain");
 }
 
 async function copyProof() {
@@ -1049,6 +1071,7 @@ function bindEvents() {
   elements.copyProofButton.addEventListener("click", copyProof);
   elements.exportJsonButton.addEventListener("click", exportProofJson);
   elements.exportMarkdownButton.addEventListener("click", exportProofMarkdown);
+  elements.exportPrivateKeyButton.addEventListener("click", exportPrivateKey);
   elements.copyInstallButton.addEventListener("click", copyInstallCommand);
   elements.runInstallButton.addEventListener("click", () => runInstall());
   elements.installThruButton.addEventListener("click", async () => {
