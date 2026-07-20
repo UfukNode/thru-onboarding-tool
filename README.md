@@ -98,3 +98,7 @@ Private key output from `thru keys get default` is redacted before it reaches th
 npm start
 npm test
 ```
+
+## License
+
+MIT
