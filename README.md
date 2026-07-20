@@ -73,6 +73,8 @@ These fields should be chosen by the user:
 - `Subdomain`
 - `Record value`
 
+<img width="1165" height="155" alt="Ekran Resmi 2026-07-20 21 16 17" src="https://github.com/user-attachments/assets/d87fd3be-cc14-44ad-9b72-aa89afe775f1" />
+
 ## Proof Data
 
 The Proof section keeps:
