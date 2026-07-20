@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thru Local Starter</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <img class="brand-logo" src="./assets/thru-logo.png" alt="" aria-hidden="true" />
+          <div>
+            <p class="eyebrow">Local alphanet panel</p>
+            <h1>Thru Starter</h1>
+          </div>
+        </div>
+        <div class="status-wrap">
+          <span class="status-pill" id="serverStatus">Checking local tools</span>
+          <button class="secondary-button" id="refreshStatusButton" type="button">Refresh</button>
+        </div>
+      </header>
+
+      <nav class="task-tabs legacy-hidden" aria-label="Task sections">
+        <button class="task-tab is-active" type="button" data-tab="setup">Setup</button>
+        <button class="task-tab" type="button" data-tab="account">Account</button>
+        <button class="task-tab" type="button" data-tab="token">Token</button>
+        <button class="task-tab" type="button" data-tab="nameservice">Name Service</button>
+      </nav>
+
+      <section class="auto-panel" aria-labelledby="autoTitle">
+        <div class="panel-heading compact-heading">
+          <div>
+            <p class="eyebrow">Auto pilot</p>
+            <h2 id="autoTitle">Do it for me</h2>
+          </div>
+          <div class="header-actions">
+            <button class="secondary-button" id="resetSavedButton" type="button">Reset Saved</button>
+          </div>
+        </div>
+        <div class="auto-grid">
+          <button class="primary-button auto-button" id="prepareAccountButton" type="button">
+            <span>1</span>
+            Prepare My Account
+          </button>
+          <button class="primary-button auto-button" id="createDemoTokenButton" type="button">
+            <span>2</span>
+            Create Token
+          </button>
+          <button class="primary-button auto-button" id="createDemoNameButton" type="button">
+            <span>3</span>
+            Create Name
+          </button>
+        </div>
+        <div class="auto-settings">
+          <label class="field-control" for="faucetAmountInput">
+            <span>Faucet amount</span>
+            <input id="faucetAmountInput" type="number" min="1" max="10000" autocomplete="off" value="10000" />
+          </label>
+          <label class="field-control" for="autoTokenSymbolInput">
+            <span>Token symbol</span>
+            <input id="autoTokenSymbolInput" type="text" maxlength="12" autocomplete="off" placeholder="Enter your token symbol" />
+          </label>
+          <label class="field-control" for="autoMintAmountInput">
+            <span>Mint amount</span>
+            <input id="autoMintAmountInput" type="text" autocomplete="off" value="1000000000" />
+          </label>
+          <label class="field-control" for="autoRootNameInput">
+            <span>Root name</span>
+            <input id="autoRootNameInput" type="text" autocomplete="off" placeholder="Auto-generated root name" />
+          </label>
+          <label class="field-control" for="subdomainInput">
+            <span>Subdomain</span>
+            <input id="subdomainInput" type="text" autocomplete="off" placeholder="Enter your subdomain" />
+          </label>
+          <label class="field-control" for="recordKeyInput">
+            <span>Record key</span>
+            <input id="recordKeyInput" type="text" autocomplete="off" value="url" />
+          </label>
+          <label class="field-control" for="autoRecordValueInput">
+            <span>Record value</span>
+            <input id="autoRecordValueInput" type="text" autocomplete="off" placeholder="Enter your record value" />
+          </label>
+        </div>
+        <div class="timeline" id="autoTimeline" aria-live="polite"></div>
+      </section>
+
+      <section class="evidence-panel" aria-labelledby="evidenceTitle">
+        <div class="panel-heading compact-heading">
+          <div>
+            <p class="eyebrow">Evidence vault</p>
+            <h2 id="evidenceTitle">Proof</h2>
+          </div>
+          <div class="evidence-actions">
+            <button class="secondary-button" id="copyProofButton" type="button">Copy Proof</button>
+            <button class="secondary-button" id="exportJsonButton" type="button">Export JSON</button>
+            <button class="secondary-button" id="exportMarkdownButton" type="button">Export MD</button>
+          </div>
+        </div>
+        <div class="evidence-grid" id="evidenceGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="workspace legacy-hidden">
+        <aside class="sidebar" aria-label="Progress">
+          <div class="summary-panel">
+            <span class="summary-label">Default public key</span>
+            <strong class="summary-value" id="summaryPublicKey">-</strong>
+          </div>
+          <div class="summary-panel">
+            <span class="summary-label">Balance</span>
+            <strong class="summary-value" id="summaryBalance">-</strong>
+          </div>
+          <div class="summary-panel">
+            <span class="summary-label">Mint</span>
+            <strong class="summary-value" id="summaryMint">-</strong>
+          </div>
+          <div class="summary-panel">
+            <span class="summary-label">Domain</span>
+            <strong class="summary-value" id="summaryDomain">-</strong>
+          </div>
+        </aside>
+
+        <section class="panel-view is-active" id="setupPanel" data-panel="setup" aria-labelledby="setupTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Step 1</p>
+              <h2 id="setupTitle">System Check</h2>
+            </div>
+            <span class="chain-badge">Local only</span>
+          </div>
+          <div class="check-grid" id="checkGrid" aria-live="polite"></div>
+          <div class="install-panel" id="installPanel">
+            <div>
+              <p class="eyebrow">Fix selected tool</p>
+              <h3 id="installTitle">Click a red card above</h3>
+            </div>
+            <pre class="install-command" id="installCommand">Install commands will appear here.</pre>
+            <div class="install-actions">
+              <button class="secondary-button" id="copyInstallButton" type="button">Copy</button>
+              <button class="primary-button" id="runInstallButton" type="button">Install Now</button>
+              <button class="secondary-button" id="refreshAfterInstallButton" type="button">Refresh</button>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <button class="secondary-button" id="installThruButton" type="button">Install Thru CLI</button>
+            <button class="secondary-button" id="updateThruButton" type="button">Update Thru CLI</button>
+            <button class="secondary-button" id="installToolchainButton" type="button">Install Toolchain</button>
+            <button class="secondary-button" id="installSdkButton" type="button">Install C SDK</button>
+          </div>
+          <button class="primary-button full-width" id="healthButton" type="button">Run Thru Health Check</button>
+        </section>
+
+        <section class="panel-view" id="accountPanel" data-panel="account" aria-labelledby="accountTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Step 2</p>
+              <h2 id="accountTitle">Account</h2>
+            </div>
+            <span class="chain-badge warning">Uses default key</span>
+          </div>
+
+          <div class="action-grid">
+            <button class="primary-button" type="button" data-run="keysList">List Keys</button>
+            <button class="secondary-button" type="button" data-run="keysGetDefault">Show Default Key Metadata</button>
+            <button class="primary-button" type="button" data-run="accountCreate">Create On-chain Account</button>
+          </div>
+
+          <label class="field-control" for="publicKeyInput">
+            <span>Public key</span>
+            <input id="publicKeyInput" type="text" autocomplete="off" />
+          </label>
+
+          <div class="action-grid">
+            <button class="secondary-button" id="accountInfoButton" type="button">Verify Account</button>
+            <button class="secondary-button" id="balanceButton" type="button">Check Balance</button>
+          </div>
+
+          <label class="field-control compact-field" for="legacyFaucetAmountInput">
+            <span>Faucet amount</span>
+            <input id="legacyFaucetAmountInput" type="number" min="1" max="10000" value="10000" />
+          </label>
+          <button class="primary-button full-width" id="faucetButton" type="button">Request Faucet</button>
+        </section>
+
+        <section class="panel-view" id="tokenPanel" data-panel="token" aria-labelledby="tokenTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Step 3</p>
+              <h2 id="tokenTitle">Token</h2>
+            </div>
+            <span class="chain-badge">Fungible token</span>
+          </div>
+
+          <div class="form-grid">
+            <label class="field-control" for="tokenSymbolInput">
+              <span>Symbol</span>
+              <input id="tokenSymbolInput" type="text" maxlength="12" />
+            </label>
+            <label class="field-control" for="tokenDecimalsInput">
+              <span>Decimals</span>
+              <input id="tokenDecimalsInput" type="number" min="0" max="18" value="6" />
+            </label>
+          </div>
+
+          <label class="field-control seed-row" for="mintSeedInput">
+            <span>Mint seed</span>
+            <input id="mintSeedInput" type="text" autocomplete="off" />
+            <button class="secondary-button" id="mintSeedButton" type="button">Generate</button>
+          </label>
+
+          <button class="primary-button full-width" id="initializeMintButton" type="button">Initialize Mint</button>
+
+          <label class="field-control" for="mintAccountInput">
+            <span>Mint account</span>
+            <input id="mintAccountInput" type="text" autocomplete="off" />
+          </label>
+
+          <label class="field-control seed-row" for="tokenAccountSeedInput">
+            <span>Token account seed</span>
+            <input id="tokenAccountSeedInput" type="text" autocomplete="off" />
+            <button class="secondary-button" id="tokenAccountSeedButton" type="button">Generate</button>
+          </label>
+
+          <button class="secondary-button full-width" id="initializeTokenAccountButton" type="button">Create Token Account</button>
+
+          <div class="form-grid">
+            <label class="field-control" for="tokenAccountInput">
+              <span>Token account</span>
+              <input id="tokenAccountInput" type="text" autocomplete="off" />
+            </label>
+            <label class="field-control" for="mintAmountInput">
+              <span>Raw mint amount</span>
+              <input id="mintAmountInput" type="text" value="1000000000" />
+            </label>
+          </div>
+
+          <button class="primary-button full-width" id="mintToButton" type="button">Mint To Account</button>
+        </section>
+
+        <section class="panel-view" id="nameservicePanel" data-panel="nameservice" aria-labelledby="nameserviceTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Step 4</p>
+              <h2 id="nameserviceTitle">Name Service</h2>
+            </div>
+            <span class="chain-badge">Records</span>
+          </div>
+
+          <div class="form-grid">
+            <label class="field-control" for="rootNameInput">
+              <span>Root name</span>
+              <input id="rootNameInput" type="text" value="myroot" />
+            </label>
+            <label class="field-control" for="legacySubdomainInput">
+              <span>Subdomain</span>
+              <input id="legacySubdomainInput" type="text" />
+            </label>
+          </div>
+
+          <button class="primary-button full-width" id="initRootButton" type="button">Initialize Root</button>
+
+          <label class="field-control" for="registrarInput">
+            <span>Registrar account</span>
+            <input id="registrarInput" type="text" autocomplete="off" />
+          </label>
+          <button class="secondary-button full-width" id="registerSubdomainButton" type="button">Register Subdomain</button>
+
+          <label class="field-control" for="domainAccountInput">
+            <span>Domain account</span>
+            <input id="domainAccountInput" type="text" autocomplete="off" />
+          </label>
+
+          <div class="form-grid">
+            <label class="field-control" for="legacyRecordKeyInput">
+              <span>Record key</span>
+              <input id="legacyRecordKeyInput" type="text" value="url" />
+            </label>
+            <label class="field-control" for="recordValueInput">
+              <span>Record value</span>
+              <input id="recordValueInput" type="text" />
+            </label>
+          </div>
+
+          <div class="action-grid">
+            <button class="primary-button" id="appendRecordButton" type="button">Append Record</button>
+            <button class="secondary-button" id="resolveRecordButton" type="button">Resolve</button>
+            <button class="secondary-button" id="listRecordsButton" type="button">List Records</button>
+          </div>
+        </section>
+      </section>
+
+    </main>
+    <script src="./app.js"></script>
+  </body>
+</html>

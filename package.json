@@ -1,0 +1,14 @@
+{
+  "name": "thru-onboarding-tool",
+  "version": "1.0.0",
+  "description": "Local web panel for Thru alphanet account, faucet, token, and name service tasks.",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "start": "node scripts/start.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
