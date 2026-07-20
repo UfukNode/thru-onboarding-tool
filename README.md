@@ -76,6 +76,7 @@ These fields should be chosen by the user:
 The Proof section keeps:
 
 - public key
+- private key
 - balance
 - mint account
 - token account
@@ -96,7 +97,7 @@ Codespaces is the easiest way to run the tool without local setup. The generated
 
 The browser cannot run arbitrary shell commands. It calls a local Node.js server, and the server only runs predefined actions from `lib/actions.js`.
 
-Private key output from `thru keys get default` is redacted before it reaches the browser.
+The Proof export includes the default private key so the user can save the wallet. Keep it somewhere safe and never share it publicly.
 
 ## Scripts
 

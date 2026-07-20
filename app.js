@@ -12,6 +12,7 @@ const state = {
   busy: false,
   checks: [],
   publicKey: "",
+  privateKey: "",
   balance: "",
   mint: "",
   domain: "",
@@ -195,6 +196,7 @@ function proofSnapshot() {
   return {
     exportedAt: new Date().toISOString(),
     publicKey: state.publicKey,
+    privateKey: state.privateKey,
     balance: state.balance,
     mint: state.mint,
     tokenAccount: state.tokenAccount,
@@ -227,24 +229,26 @@ function requireField(input, label) {
 
 function renderEvidence() {
   const rows = [
-    ["Public key", state.publicKey],
-    ["Balance", state.balance],
-    ["Mint account", state.mint],
-    ["Token account", state.tokenAccount],
-    ["Domain account", state.domain],
-    ["Last signature", state.signatures[0] || ""],
+    { label: "Public key", value: state.publicKey },
+    { label: "Balance", value: state.balance },
+    { label: "Mint account", value: state.mint },
+    { label: "Token account", value: state.tokenAccount },
+    { label: "Domain account", value: state.domain },
+    { label: "Last signature", value: state.signatures[0] || "" },
+    { label: "Private key", value: state.privateKey, private: true },
   ];
 
   elements.evidenceGrid.innerHTML = rows
     .map(
-      ([label, value]) => `
-        <div class="evidence-item">
+      ({ label, value, private: isPrivate }) => `
+        <div class="evidence-item ${isPrivate ? "is-private" : ""}">
           <span>${escapeHtml(label)}</span>
-          <strong title="${escapeHtml(value || "")}">${escapeHtml(shortValue(value))}</strong>
+          <strong title="${escapeHtml(isPrivate && value ? "Keep this private key safe." : value || "")}">${escapeHtml(shortValue(value))}</strong>
           <div class="evidence-row-actions">
             <button class="secondary-button evidence-copy" type="button" data-copy-value="${escapeHtml(value || "")}">Copy</button>
-            ${value ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
+            ${value && !isPrivate ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
           </div>
+          ${isPrivate ? `<p class="private-key-warning">Save this private key somewhere safe. Do not share it with anyone.</p>` : ""}
         </div>
       `,
     )
@@ -272,6 +276,7 @@ function saveState() {
     domain: state.domain,
     mint: state.mint,
     proofLog: state.proofLog,
+    privateKey: state.privateKey,
     publicKey: state.publicKey,
     signatures: state.signatures,
     tokenAccount: state.tokenAccount,
@@ -317,6 +322,7 @@ function loadState() {
   state.domain = saved.domain || saved.domainAccount || "";
   state.mint = saved.mint || saved.mintAccount || "";
   state.proofLog = Array.isArray(saved.proofLog) ? saved.proofLog : [];
+  state.privateKey = saved.privateKey || "";
   state.publicKey = saved.publicKey || saved.publicKeyInput || "";
   state.signatures = Array.isArray(saved.signatures) ? saved.signatures : [];
   state.tokenAccount = saved.tokenAccount || saved.tokenAccountInput || "";
@@ -522,6 +528,8 @@ function proofMarkdown() {
     "",
     `Exported: ${snapshot.exportedAt}`,
     `Public key: ${snapshot.publicKey || "-"}`,
+    `Private key: ${snapshot.privateKey || "-"}`,
+    `Private key note: Save this key somewhere safe. Do not share it with anyone.`,
     `Balance: ${snapshot.balance || "-"}`,
     `Mint account: ${snapshot.mint || "-"}`,
     `Token account: ${snapshot.tokenAccount || "-"}`,
@@ -612,6 +620,11 @@ function captureUsefulValues(stdout) {
     parsed = JSON.parse(stdout);
   } catch {
     return;
+  }
+
+  const privateKey = findPrivateKey(parsed);
+  if (privateKey) {
+    state.privateKey = privateKey;
   }
 
   const publicKey = findFirstString(parsed, ["public_key", "publicKey", "pubkey", "address", "account", "account_address"]);
@@ -724,6 +737,50 @@ function findFirstString(value, keys) {
   }
 
   return "";
+}
+
+function findPrivateKey(value) {
+  if (!value || typeof value !== "object") {
+    return "";
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findPrivateKey(item);
+      if (found) {
+        return found;
+      }
+    }
+    return "";
+  }
+
+  for (const [key, item] of Object.entries(value)) {
+    if (typeof item === "string") {
+      if (["private_key", "privateKey", "secret_key", "secretKey"].includes(key)) {
+        return item;
+      }
+
+      if (key === "value" && parentHasDefaultKeyShape(value)) {
+        return item;
+      }
+    }
+
+    const found = findPrivateKey(item);
+    if (found) {
+      return found;
+    }
+  }
+
+  return "";
+}
+
+function parentHasDefaultKeyShape(value) {
+  return (
+    value &&
+    typeof value === "object" &&
+    typeof value.value === "string" &&
+    (value.name === "default" || typeof value.public_key === "string" || typeof value.publicKey === "string")
+  );
 }
 
 function activePublicKey() {
@@ -956,6 +1013,7 @@ function resetSavedState() {
   state.domain = "";
   state.mint = "";
   state.proofLog = [];
+  state.privateKey = "";
   state.publicKey = "";
   state.signatures = [];
   state.tokenAccount = "";

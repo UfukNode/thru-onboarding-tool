@@ -74,9 +74,9 @@ test("creates 32-byte hex seeds", () => {
   assert.match(createSeed(), /^[a-f0-9]{64}$/);
 });
 
-test("redacts default private key output", () => {
+test("keeps default private key output for proof export", () => {
   const output = '{"keys":{"name":"default","value":"secret-private-key","public_key":"abc"}}';
-  assert.equal(redactResult("keysGetDefault", output), '{"keys":{"name":"default","value":"[hidden-private-key]","public_key":"abc"}}');
+  assert.equal(redactResult("keysGetDefault", output), output);
 });
 
 test("builds platform install steps from allowlist only", () => {
