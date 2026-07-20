@@ -80,6 +80,7 @@ These fields should be chosen by the user:
 The Proof section keeps:
 
 - public key
+- private key
 - balance
 - mint account
 - token account
