@@ -92,6 +92,8 @@ Public values can be copied. The private key is not shown in the list; use the s
 https://scan.thru.org/
 ```
 
+<img width="1455" height="596" alt="Ekran Resmi 2026-07-20 21 58 43" src="https://github.com/user-attachments/assets/c3367bb2-e5c3-401f-b13d-4b44ad52f91c" />
+
 ## Codespaces Notes
 
 Codespaces is the easiest way to run the tool without local setup. The generated Thru key lives inside the Codespace environment, so export your proof before deleting the Codespace.
