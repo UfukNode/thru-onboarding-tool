@@ -80,14 +80,13 @@ These fields should be chosen by the user:
 The Proof section keeps:
 
 - public key
-- private key
 - balance
 - mint account
 - token account
 - domain account
 - last signature
 
-Public values can be copied. The private key has a separate `Private Key` download button. Explorer links open the matching address or transaction on:
+Public values can be copied. The private key is not shown in the list; use the separate `Private Key` button to download it. Explorer links open the matching address or transaction on:
 
 ```text
 https://scan.thru.org/

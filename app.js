@@ -236,24 +236,18 @@ function renderEvidence() {
     { label: "Token account", value: state.tokenAccount },
     { label: "Domain account", value: state.domain },
     { label: "Last signature", value: state.signatures[0] || "" },
-    { label: "Private key", value: state.privateKey, private: true },
   ];
 
   elements.evidenceGrid.innerHTML = rows
     .map(
-      ({ label, value, private: isPrivate }) => `
-        <div class="evidence-item ${isPrivate ? "is-private" : ""}">
+      ({ label, value }) => `
+        <div class="evidence-item">
           <span>${escapeHtml(label)}</span>
-          <strong title="${escapeHtml(isPrivate && value ? "Keep this private key safe." : value || "")}">${escapeHtml(shortValue(value))}</strong>
-          ${
-            isPrivate
-              ? ""
-              : `<div class="evidence-row-actions">
-                  <button class="secondary-button evidence-copy" type="button" data-copy-value="${escapeHtml(value || "")}">Copy</button>
-                  ${value ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
-                </div>`
-          }
-          ${isPrivate ? `<p class="private-key-warning">Save this private key somewhere safe. Do not share it with anyone.</p>` : ""}
+          <strong title="${escapeHtml(value || "")}">${escapeHtml(shortValue(value))}</strong>
+          <div class="evidence-row-actions">
+            <button class="secondary-button evidence-copy" type="button" data-copy-value="${escapeHtml(value || "")}">Copy</button>
+            ${value ? `<a class="secondary-button evidence-copy" href="${explorerUrl(label, value)}" target="_blank" rel="noreferrer">Explorer</a>` : ""}
+          </div>
         </div>
       `,
     )
