@@ -26,18 +26,11 @@ http://127.0.0.1:5173
 
 If port `5173` is busy, the server automatically tries the next available port.
 
-## Network Defaults
+## Official Links
 
-| Variable | Purpose | Default |
-| --- | --- | --- |
-| `NEXT_PUBLIC_THRU_RPC_URL` | Browser RPC endpoint | `https://rpc.alphanet.thru.org` |
-| `NEXT_PUBLIC_THRU_EXPLORER_URL` | Explorer base URL | `https://scan.thru.org` |
-| `NEXT_PUBLIC_THRU_NETWORK` | Network label | `Alphanet` |
-| `NEXT_PUBLIC_THRU_CHAIN_ID` | Transaction chain ID | `1` |
-| `NEXT_PUBLIC_FAUCET_AMOUNT` | Requested faucet amount in base units | `10000` |
-| `NEXT_PUBLIC_COMMUNITY_FAUCET_URL` | Backup web faucet | `https://faucet.thruscan.net` |
-| `NEXT_PUBLIC_TOKEN_PROGRAM_ADDRESS` | Token Program address | Thru's built-in Token Program |
-| `NEXT_PUBLIC_NAME_SERVICE_PROGRAM_ADDRESS` | Name Service Program address | Thru's built-in Name Service Program |
+- `https://rpc.alphanet.thru.org` - Alphanet RPC connection used by the tool
+- `https://scan.thru.org` - Explorer for checking accounts and transactions
+- `https://faucet.thruscan.net` - Backup faucet page if the in-tool faucet is unavailable
 
 ## What It Does
 
